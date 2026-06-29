@@ -1,0 +1,20 @@
+services:
+  ecrire:
+    build: .
+    volumes:
+      - ecrire-data:/data
+    environment:
+      - DATA_DIR=/data
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.ecrire.rule=Host(`ecrire.tbriand.com`)"
+      - "traefik.http.routers.ecrire.entrypoints=websecure"
+      - "traefik.http.routers.ecrire.tls.certresolver=letsencrypt"
+      - "traefik.http.services.ecrire.loadbalancer.server.port=8000"
+    networks:
+      - webproxy
+volumes:
+  ecrire-data:
+networks:
+  webproxy:
+    external: true
